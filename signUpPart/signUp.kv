@@ -1,0 +1,115 @@
+<SignwinUser>:
+    name: "signUser"
+    email: email
+    password: password
+    r_password: r_password
+    phoneNum: phoneNum
+    FloatLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                # source: "login.jpeg"
+
+        TextInput:
+            id: email
+            text_size: self.width, self.height
+            multiline: False
+            pos_hint: {"x": 0.1, "top":0.69}
+            size_hint: 0.8, 0.05
+            hint_text: "Email address"
+            # hint_text_color: (1, 0, 0, 1)
+            # opacity: 0.5
+            valign: 'center'
+        
+        TextInput:
+            id: phoneNum
+            text_size: self.width, None
+            multiline: False
+            pos_hint: {"x": 0.1, "top":0.61}
+            size_hint: 0.8, 0.05
+            hint_text: "Phone Number"
+            valign: 'center'
+
+
+        TextInput:
+            id: password
+            password: True
+            text_size: self.width, None
+            multiline: False
+            pos_hint: {"x": 0.1, "top":0.54}
+            size_hint: 0.8, 0.05
+            hint_text: "Password"
+            valign: 'center'
+
+        TextInput:
+            id: r_password
+            password: True
+            text_size: self.width, None
+            multiline: False
+            pos_hint: {"x": 0.1, "top":0.47}
+            size_hint: 0.8, 0.05
+            hint_text: "repeat Password"
+            valign: 'center'
+
+
+        SmoothButton:
+            pos_hint:{"x":0.1,"top":0.40}
+            size_hint: 0.8, 0.07
+            font_size: (root.width**2 + root.height**2) / 13**4
+            back_color: (0.5, 0.5, 0.5, 0.8)
+            text: "Submit"
+            border_radius: [25, 2, 25, 2]
+            on_release:
+                root.submitBtnUser()
+
+        Label:
+            text:"Have you already an Account? [ref= ""][color=ff1000]Login[/color][/ref]"
+            font_size: (root.width**2 + root.height**2) / 14.5**4
+            pos_hint: {"x":0.1, "top":0.30}
+            size_hint: 0.8, 0.05
+            border: (30, 30, 30, 30)
+            markup: True
+            valign: 'center'
+            halign: 'right'
+            color: [0, 0, 0, 0.8]
+            on_ref_press:
+                root.manager.transition.direction = "down"
+                root.go_loginWin()
+
+        Label:
+            text:"Do You wanna register as a doctor? [ref= ""][color=00FF33]Here[/color][/ref]"
+            font_size: (root.width**2 + root.height**2) / 14.5**4
+            pos_hint: {"x":0.1, "top":0.25}
+            size_hint: 0.8, 0.05
+            border: (30, 30, 30, 30)
+            markup: True
+            valign: 'center'
+            halign: 'center'
+            color: [0, 0, 0, 0.8]
+
+
+
+        Label:
+            text:"User SignUp"
+            font_size: (root.width**2 + root.height**2) / 12.5**4
+            pos_hint: {"x":0.1, "top":0.9}
+            size_hint: 0.8, 0.15
+            border: (30, 30, 30, 30)
+            color: [0.5, 0.5, 0.5, 1]
+            bold: True
+
+
+<SmoothButton@Button>:
+    background_color: (0, 0, 0, 0)
+    background_normal: ''
+    back_color: (1, 0, 1, 1)
+    border_radius: [18]
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [25, 2, 25, 2]
+            
