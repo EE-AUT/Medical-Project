@@ -1,0 +1,83 @@
+<MainWindow>:
+
+    name: "Main"
+    _Camera : camera
+    img_Button : img_Button
+    _Again_Button: Again_Button
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        Circular_button:
+            id:img_Button
+            pos_hint:{"x":0.4,"top":0.15}
+            size_hint: 0.2, 0.1
+            font_size: (root.width**2 + root.height**2) / 13**4
+            back_color: (0.5, 0.5, 0.5, 0.8)
+            text: "Camera"
+            font_size:15
+            on_release:
+                root.Camera() 
+
+        Circular_button:
+            pos_hint:{"x":0.65,"top":0.12}
+            size_hint: 0.1, 0.05
+            font_size: (root.width**2 + root.height**2) / 13**4
+            back_color: (0.5, 0.5, 0.5, 0.8)
+            text: "Gallery"
+            font_size:10
+            on_release:
+                root.Gallery()
+        Circular_button:
+            id:Again_Button
+            pos_hint:{"x":0.25,"top":0.12}
+            size_hint: 0.1, 0.05
+            font_size: (root.width**2 + root.height**2) / 13**4
+            back_color: (0.5, 0.5, 0.5, 0.8)
+            text: "Again"
+            font_size:10
+            disabled:True
+            opacity:0
+            on_release:
+                root.Again()   
+        Button:
+            pos_hint: {"x":0.25,"y":0.9}
+            size_hint: 0.1, 0.05
+            text:"Ali"
+            on_release:
+                root.Change_Camera()
+    Camera:
+        opacity:0    
+
+        index:0
+        size_hint: 1,1
+        id: camera
+        resolution: (640, 480)
+        play: False
+        canvas.before:
+            PushMatrix
+            Rotate:
+                angle: -90
+                origin: self.center
+        canvas.after:
+            PopMatrix
+
+<Circular_button@Button>:
+    background_color: (0, 0, 0, 0)
+    back_color: (1, 0, 1, 1)
+    canvas.before:
+        Color:
+            rgba: self.back_color
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [100, 100, 100, 100]

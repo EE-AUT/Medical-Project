@@ -5,13 +5,13 @@ from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.config import Config
+from kivy.uix.image import Image
+from kivy.uix.boxlayout import BoxLayout
 
-Config.set('graphics', 'width', '450')
-Config.set('graphics', 'height', '800')
-
-
-
-
+import os
+import time
+Config.set('graphics', 'width', '480')
+Config.set('graphics', 'height', '600')
 
 # Login window
 class LoginWin(Screen):
@@ -21,7 +21,10 @@ class LoginWin(Screen):
     
     def loginBtn(self):
         if self.checkValid():
-            print(self.email.text, self.password.text)
+            pass
+            screens[ "Main"]=MainWindow(name="Main")
+            sm.add_widget(screens["Main"])
+            sm.current="Main"
         else:
             pupUp_Msg(self, txt= "Fill all with \ncorrect value please")
 
@@ -81,6 +84,56 @@ def pupUp_Msg(win, txt= ""):
     pop.open()
 
 
+class MainWindow(Screen):
+    _Camera = ObjectProperty(None)
+    img_Button=ObjectProperty(None)
+    _Again_Button=ObjectProperty(None) 
+
+    def Camera(self):
+        print("Hi")
+        if self.img_Button.text=='Camera':
+            Show_Widget(self._Camera)
+            Hide_Widget(self._Again_Button)
+            self._Camera.play = True
+            self.img_Button.text='Take a Photo'
+            pass
+        elif  self.img_Button.text=='Take a Photo':
+            self._Camera.play=False
+            self.img_Button.text= 'Analysis'    
+            Show_Widget(self._Again_Button)
+
+        elif self.img_Button.text=='Analysis':
+
+            self.img_Button.text= 'Camera'
+            timestr = time.strftime("%Y%m%d_%H%M%S")
+            self._Camera.export_to_png("IMG_{}.png".format(timestr))
+            print("Captured")
+            Hide_Widget(self._Again_Button)
+            # Hide_Widget(self._Camera)
+            self._Camera.opacity=0    
+
+    def Again(self):
+        self._Camera.play=True
+        Hide_Widget(self._Again_Button)
+        self.img_Button.text='Take a Photo'
+
+    def Change_Camera(self):
+        try:
+            self._Camera.index=int(not self._Camera.index)
+        except:
+            pass
+    # def Gallery(self):
+    #     Image(source="ali.png").canvas
+
+def Hide_Widget(widget):
+    widget.opacity=0    
+    widget.disabled = True
+
+def Show_Widget(widget):
+    widget.opacity=1
+    widget.disabled = False
+
+
 # windows manager
 class WindowManager(ScreenManager):
     pass
@@ -89,6 +142,7 @@ class WindowManager(ScreenManager):
 
 Builder.load_file("./loginPart/login.kv")
 Builder.load_file("./signUpPart/signUp.kv")
+Builder.load_file("./MainWindow/Mainwindow.kv")
 
 # create windowsmanager and handle screens
 sm = WindowManager()
