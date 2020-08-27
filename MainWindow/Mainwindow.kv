@@ -31,7 +31,7 @@
             # orientation: 'vertical'
             # pos: self.pos
             # size: self.size * 2
-            resolution: (root.width, root.height)
+            resolution: (1280, 720)
 
             play: False
             canvas.before:
@@ -89,7 +89,7 @@
         FileChooserListView:
             id: filechooser
             filters:['*.png','*.jpeg','*.jpg']
-            # path:"/sdcard"
+            path:"/sdcard"
         BoxLayout:
             size_hint_y: None
             height: 30

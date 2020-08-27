@@ -4,25 +4,23 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
-# from kivy.uix.checkbox import CheckBox
 from kivy.config import Config
 from kivy.uix.image import Image
 from kivy.clock import Clock, mainthread
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 
-from database import Database
+# from database import Database
 
 import threading
 
 import os
 import time
-Config.set('graphics', 'width', '480')
-Config.set('graphics', 'height', '800')
 
 
-# from android.permissions import request_permissions, Permission
-# request_permissions([Permission.INTERNET,Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE,Permission.CAMERA])
+
+from android.permissions import request_permissions, Permission
+request_permissions([Permission.INTERNET,Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE,Permission.CAMERA])
 
 # Login window
 class LoginWin(Screen):
@@ -104,7 +102,7 @@ class SignwinUser(Screen):
             info['user_type'] = 'Ordinary person'
             info['regester_type'] = 'App'
             info['doctor_id'] = None
-            check = Database.registerOP(**info)
+            # check = Database.registerOP(**info)
 
             if check == 1:
                 if self._CheckBox_Doctor.active:
@@ -197,6 +195,8 @@ class MainWindow(Screen):
         elif self.img_Button.source == './icon/analysis.png':
             if self._Camera.opacity == 1:
                 timestr = time.strftime("%Y%m%d_%H%M%S")
+                if not os.path.isfile('/sdcard/Medical Project'):
+                    os.mkdir("/sdcard/Medical Project")
                 self._Camera.export_to_png(
                     "/sdcard/Medical Project/IMG_{}.png".format(timestr))
             else:
