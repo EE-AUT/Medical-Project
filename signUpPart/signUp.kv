@@ -4,6 +4,11 @@
     password: password
     r_password: r_password
     phoneNum: phoneNum
+    userMsg: userMsg 
+    fName: FName
+    lName: LName
+
+
     FloatLayout:
         canvas.before:
             Rectangle:
@@ -11,67 +16,99 @@
                 size: self.size
                 # source: "login.jpeg"
 
+
+
         TextInput:
-            id: email
-            text_size: self.width, self.height
+            id: FName
+            multiline: False
+            pos_hint: {"x": 0.1, "top":0.76}
+            size_hint: 0.8, 0.05
+            hint_text: "First Name"
+            # hint_text_color: (1, 0, 0, 1)
+            # opacity: 0.5
+            valign: 'center'
+            on_text:
+                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
+
+
+        TextInput:
+            id: LName
             multiline: False
             pos_hint: {"x": 0.1, "top":0.69}
+            size_hint: 0.8, 0.05
+            hint_text: "Last Name"
+            # hint_text_color: (1, 0, 0, 1)
+            # opacity: 0.5
+            valign: 'center'
+            on_text:
+                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
+
+
+        TextInput:
+            id: email
+            multiline: False
+            pos_hint: {"x": 0.1, "top":0.62}
             size_hint: 0.8, 0.05
             hint_text: "Email address"
             # hint_text_color: (1, 0, 0, 1)
             # opacity: 0.5
             valign: 'center'
+            on_text:
+                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
         
         TextInput:
             id: phoneNum
-            text_size: self.width, None
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.61}
+            pos_hint: {"x": 0.1, "top":0.54}
             size_hint: 0.8, 0.05
             hint_text: "Phone Number"
             valign: 'center'
+            on_text:
+                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
 
 
         TextInput:
             id: password
             password: True
-            text_size: self.width, None
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.54}
+            pos_hint: {"x": 0.1, "top":0.47}
             size_hint: 0.8, 0.05
             hint_text: "Password"
             valign: 'center'
+            on_text:
+                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
 
         TextInput:
             id: r_password
             password: True
-            text_size: self.width, None
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.47}
+            pos_hint: {"x": 0.1, "top":0.40}
             size_hint: 0.8, 0.05
             hint_text: "repeat Password"
             valign: 'center'
+            on_text:
+                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
 
 
         SmoothButton:
-            pos_hint:{"x":0.1,"top":0.40}
+            pos_hint:{"x":0.1,"top":0.33}
             size_hint: 0.8, 0.07
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "25sp"
+            # disabled: True
             back_color: (0.5, 0.5, 0.5, 0.8)
             text: "Submit"
-            border_radius: [25, 2, 25, 2]
+            # border_radius: [25, 2, 25, 2]
             on_release:
                 root.submitBtnUser()
 
         Label:
             text:"Have you already an Account? [ref= ""][color=ff1000]Login[/color][/ref]"
-            font_size: (root.width**2 + root.height**2) / 14.5**4
-            pos_hint: {"x":0.1, "top":0.30}
+            pos_hint: {"x":0.1, "top":0.23}
             size_hint: 0.8, 0.05
             border: (30, 30, 30, 30)
             markup: True
             valign: 'center'
-            halign: 'right'
+            halign: 'center'
             color: [0, 0, 0, 0.8]
             on_ref_press:
                 root.manager.transition.direction = "down"
@@ -79,8 +116,7 @@
 
         Label:
             text:"Do You wanna register as a doctor? [ref= ""][color=00FF33]Here[/color][/ref]"
-            font_size: (root.width**2 + root.height**2) / 14.5**4
-            pos_hint: {"x":0.1, "top":0.25}
+            pos_hint: {"x":0.1, "top":0.18}
             size_hint: 0.8, 0.05
             border: (30, 30, 30, 30)
             markup: True
@@ -92,11 +128,23 @@
 
         Label:
             text:"User SignUp"
-            font_size: (root.width**2 + root.height**2) / 12.5**4
-            pos_hint: {"x":0.1, "top":0.9}
+            font_size: "45sp"
+            pos_hint: {"x":0.1, "top":0.95}
             size_hint: 0.8, 0.15
             border: (30, 30, 30, 30)
             color: [0.5, 0.5, 0.5, 1]
+            bold: True
+
+        Label:
+            id: userMsg
+            text:"userMsg"
+            font_size: "20sp"
+            opacity: 0
+            pos_hint: {"x":0.1, "top":0.13}
+            size_hint: 0.8, 0.15
+            color: [1, 0.4, 0.2, 1]
+            valign: 'center'
+            halign: 'center'
             bold: True
 
 
@@ -111,5 +159,5 @@
         RoundedRectangle:
             size: self.size
             pos: self.pos
-            radius: [25, 2, 25, 2]
+            radius: [30, 2, 30, 2]
             

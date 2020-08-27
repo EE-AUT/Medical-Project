@@ -2,6 +2,7 @@
     name: "login"
     email: email
     password: password
+    userMsg: userMsg
 
     FloatLayout:
         canvas.before:
@@ -12,7 +13,6 @@
 
         TextInput:
             id: email
-            text_size: self.width, self.height
             multiline: False
             pos_hint: {"x": 0.1, "top":0.6}
             size_hint: 0.8, 0.05
@@ -20,33 +20,32 @@
             # hint_text_color: (1, 0, 0, 1)
             # opacity: 0.5
             valign: 'center'
+            on_text:
+                root.error(color= (1, 1, 1, 1), Hide= True, clr= True)
         
         TextInput:
             id: password
             password: True
             # password_mask: "+"
-            text_size: self.width, None
             multiline: False
             pos_hint: {"x": 0.1, "top":0.53}
             size_hint: 0.8, 0.05
             hint_text: "Password"
             valign: 'center'
+            on_text:
+                root.error(color= (1, 1, 1, 1), Hide= True, clr= True)
 
         SmoothButton:
             pos_hint:{"x":0.1,"top":0.47}
             size_hint: 0.8, 0.07
-            font_size: (root.width*2 + root.height*2) / (13*4)
-            back_color: (0.5, 0.5, 0.5, 0.8)
+            font_size: "25sp"
+            back_color: (0.5, 0.5, 0.5, 0.6)
             text: "Login"
-            border_radius: [25, 2, 25, 2]
             on_release:
                 root.loginBtn()
 
         Label:
             text:"Don't have an Account? [ref= ""][color=ff1000]SignUp[/color][/ref]"
-            # text: 'Load Up [ref]some_link[/ref]'
-            # font_size: (root.width**2 + root.height**2) / 14.5**4
-            text_size:self.width,None
             pos_hint: {"x":0.1, "top":0.37}
             size_hint: 0.8, 0.05
             border: (30, 30, 30, 30)
@@ -60,8 +59,6 @@
 
         Label:
             text:"Forgot your password? [ref= ""][color=00FF33]Here[/color][/ref]"
-            # font_size: (root.width**2 + root.height**2) / 14.5**4
-            text_size:self.width,None
             pos_hint: {"x":0.1, "top":0.32}
             size_hint: 0.8, 0.05
             border: (30, 30, 30, 30)
@@ -74,11 +71,24 @@
 
         Label:
             text:"User Login"
-            font_size: (root.width*2 + root.height*2) / (14.5*2)
+            font_size: "45sp"
             pos_hint: {"x":0.1, "top":0.9}
             size_hint: 0.8, 0.15
             border: (30, 30, 30, 30)
             color: [0.5, 0.5, 0.5, 1]
+            bold: True
+
+
+        Label:
+            id: userMsg
+            text:"userMsg"
+            font_size: "20sp"
+            opacity: 0
+            pos_hint: {"x":0.1, "top":0.2}
+            size_hint: 0.8, 0.15
+            color: [1, 0.4, 0.2, 1]
+            valign: 'center'
+            halign: 'center'
             bold: True
 
 
@@ -93,23 +103,10 @@
         RoundedRectangle:
             size: self.size
             pos: self.pos
-            radius: [25, 2, 25, 2]
+            radius: [30, 2, 30, 2]
 
 
 
-# <SmoothTextInput@TextInput>:
-#     background_color: (0, 0, 0, 0)
-#     # background_normal: ''
-#     back_color: (1, 0, 1, 1)
-#     border_radius: [18]
-#     hint_text_color: self.hint_text_color
-#     canvas.before:
-#         Color:
-#             rgba: self.back_color
-#         RoundedRectangle:
-#             size: self.size
-#             pos: self.pos
-#             radius: [8, 8, 8, 8]
 
 
 
