@@ -7,8 +7,9 @@
     userMsg: userMsg 
     fName: FName
     lName: LName
-
-
+    _CheckBox_Doctor:CheckBox_Doctor
+    _Label_Doctor:Label_Doctor
+    _DoctorID : DoctorID
     FloatLayout:
         canvas.before:
             Rectangle:
@@ -59,7 +60,7 @@
         TextInput:
             id: phoneNum
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.54}
+            pos_hint: {"x": 0.1, "top":0.55}
             size_hint: 0.8, 0.05
             hint_text: "Phone Number"
             valign: 'center'
@@ -71,7 +72,7 @@
             id: password
             password: True
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.47}
+            pos_hint: {"x": 0.1, "top":0.48}
             size_hint: 0.8, 0.05
             hint_text: "Password"
             valign: 'center'
@@ -82,16 +83,40 @@
             id: r_password
             password: True
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.40}
+            pos_hint: {"x": 0.1, "top":0.41}
             size_hint: 0.8, 0.05
             hint_text: "repeat Password"
             valign: 'center'
             on_text:
                 root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
+        Label:
+            id:Label_Doctor
+            text:'Are you a Doctor ?'
+            pos_hint: {"x":0.1, "top":0.35}
+            size_hint: 0.37, 0.05
+            border: (30, 30, 30, 30)
+            markup: True
+            color: [0, 0, 0, 0.8]
+        TextInput:
+            id: DoctorID
+            multiline: False
+            pos_hint:  {"x":0.15, "top":0.345}
+            size_hint: 0.5, 0.04
+            hint_text: "Doctor ID"
+            opacity:0
+            valign: 'center'
+            on_text:
 
+        CheckBox:
+            id:CheckBox_Doctor
+            pos_hint:{"x":0.1,"top":0.35}
+            size_hint: 0.04, 0.05
+            color:(0,0.2,1,0.6)
+            on_release:
+                root.Doctor()
 
         SmoothButton:
-            pos_hint:{"x":0.1,"top":0.33}
+            pos_hint:{"x":0.1,"top":0.29}
             size_hint: 0.8, 0.07
             font_size: "25sp"
             # disabled: True
@@ -103,7 +128,7 @@
 
         Label:
             text:"Have you already an Account? [ref= ""][color=ff1000]Login[/color][/ref]"
-            pos_hint: {"x":0.1, "top":0.23}
+            pos_hint: {"x":0.1, "top":0.19}
             size_hint: 0.8, 0.05
             border: (30, 30, 30, 30)
             markup: True
@@ -113,17 +138,6 @@
             on_ref_press:
                 root.manager.transition.direction = "down"
                 root.go_loginWin()
-
-        Label:
-            text:"Do You wanna register as a doctor? [ref= ""][color=00FF33]Here[/color][/ref]"
-            pos_hint: {"x":0.1, "top":0.18}
-            size_hint: 0.8, 0.05
-            border: (30, 30, 30, 30)
-            markup: True
-            valign: 'center'
-            halign: 'center'
-            color: [0, 0, 0, 0.8]
-
 
 
         Label:

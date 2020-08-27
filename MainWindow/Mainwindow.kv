@@ -3,7 +3,9 @@
     _Camera : camera
     img_Button : img_Button
     _Again_Button: Again_Button
-
+    _Gallery_Button:gallery_button
+    img_Gallery: img
+    lbl_path: lbl_path
     FloatLayout:
         canvas.before:
             Color:
@@ -11,7 +13,16 @@
             Rectangle:
                 pos: self.pos
                 size: self.size
-
+        Image:
+            id: img
+            size_hint: 1,1 
+            opacity:0
+        Label:
+            id: lbl_path
+            color: (1, 0, 0, 1)
+            text: "Picture:"
+            size_hint: 0.1, 0.05  
+            pos_hint: {"x":0.5,"y":0.9}
         Camera:
             id: camera
             opacity:0   
@@ -20,6 +31,7 @@
             # orientation: 'vertical'
             # pos: self.pos
             # size: self.size * 2
+            resolution: (root.width, root.height)
 
             play: False
             canvas.before:
@@ -43,6 +55,7 @@
                 root.Camera() 
 
         Imagebutton:
+            id:gallery_button
             source: "./icon/Gallery.png"
             pos_hint:{"x":0.65,"top":0.12}
             size_hint: 0.1, 0.05
@@ -51,7 +64,7 @@
             text: "Gallery"
             font_size:10
             on_release:
-                root.Gallery()
+                root.show_load()
                 
         Imagebutton:
             id:Again_Button
@@ -66,24 +79,27 @@
             opacity:0
             on_release:
                 root.Again()   
-        # Imagebutton:
-        #     pos_hint: {"x":0.25,"y":0.9}
-        #     size_hint: 0.1, 0.05
-        #     text:"Ali"
-        #     on_release:
-        #         root.Change_Camera()
+
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
 
 
 <Imagebutton@ButtonBehavior+Image>:
     
-
-# <Circular_button@Button>:
-#     background_color: (0, 0, 0, 0)
-#     back_color: (1, 0, 1, 1)
-#     canvas.before:
-#         Color:
-#             rgba: self.back_color
-#         RoundedRectangle:
-#             size: self.size
-#             pos: self.pos
-#             radius: [100, 100, 100, 100]
