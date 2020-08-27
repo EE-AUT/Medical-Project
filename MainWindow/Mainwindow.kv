@@ -20,7 +20,7 @@
         Label:
             id: lbl_path
             color: (1, 0, 0, 1)
-            text: "Picture:"
+            
             size_hint: 0.1, 0.05  
             pos_hint: {"x":0.5,"y":0.9}
         Camera:
@@ -88,7 +88,8 @@
         orientation: "vertical"
         FileChooserListView:
             id: filechooser
-
+            filters:['*.png','*.jpeg','*.jpg']
+            # path:"/sdcard"
         BoxLayout:
             size_hint_y: None
             height: 30
