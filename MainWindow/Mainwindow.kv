@@ -31,7 +31,7 @@
             # orientation: 'vertical'
             # pos: self.pos
             # size: self.size * 2
-            resolution: (1280, 720)
+            # resolution: (1280, 720)
 
             play: False
             canvas.before:
@@ -65,6 +65,7 @@
             font_size:10
             on_release:
                 root.show_load()
+                root.manager.transition.direction = "left"
                 
         Imagebutton:
             id:Again_Button
@@ -81,25 +82,108 @@
                 root.Again()   
 
 
-<LoadDialog>:
-    BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
-        FileChooserListView:
-            id: filechooser
-            filters:['*.png','*.jpeg','*.jpg']
-            path:"/sdcard"
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
 
-            Button:
-                text: "Load"
-                on_release: root.load(filechooser.path, filechooser.selection)
+<Gallery>:
+    FloatLayout:
+        ScrollView:
+            size_hint: 1, 0.95
+            pos_hint:{"x":0,"top":0.95}
+            id: scroll
+            GridLayout:
+                id: wall
+                cols: 4
+                size_hint_y:  None
+                height: self.minimum_height
+        Button:
+            text: "Cancel"
+            size_hint: 1, 0.05
+            pos_hint:{"x":0,"top":0.05}
+            on_release:
+                root.closeGallery()
+                root.manager.transition.direction = "right"
+                
+
+        # *****************************
+
+        Button:
+            text: "Camera"
+            size_hint: 0.25, 0.05
+            pos_hint:{"x":0,"top":1}
+            on_release:
+                root.chooseDir(text= self.text)
+
+        Button:
+            text: "ScreenShut"
+            size_hint: 0.25, 0.05
+            pos_hint:{"x":0.25,"top":1}
+            on_release:
+                root.chooseDir(text= self.text)
+
+        Button:
+            text: "Download"
+            size_hint: 0.25, 0.05
+            pos_hint:{"x":0.5,"top":1}
+            on_release:
+                root.chooseDir(text= self.text)
+
+        Button:
+            text: "Telegram"
+            size_hint: 0.25, 0.05
+            pos_hint:{"x":0.75,"top":1}
+            on_release:
+                root.chooseDir(text= self.text)
+        
+        
+
+
+<FullImageView>:
+    FloatLayout:
+        Image: 
+            id: img
+            size_hint: 1, 1
+            pos_hint:{"x":0,"top":1}
+        Button:
+            text: "Select"
+            size_hint: 0.5, 0.05
+            pos_hint:{"x":0,"top":0.05}
+            opacity: 0.8
+            on_release:
+                root.manager.transition.direction = "left"
+                root.selectImage()
+        Button:
+            text: "Back"
+            size_hint: 0.5, 0.05
+            pos_hint:{"x":0.5,"top":0.05}
+            opacity: 0.8
+            on_release: 
+                root.manager.transition.direction = "left"
+                root.back()
+
+
+        
+
+
+
+
+# <LoadDialog>:
+#     BoxLayout:
+#         size: root.size
+#         pos: root.pos
+#         orientation: "vertical"
+#         FileChooserListView:
+#             id: filechooser
+#             filters:['*.png','*.jpeg','*.jpg']
+#             path:"/sdcard"
+#         BoxLayout:
+#             size_hint_y: None
+#             height: 30
+#             Button:
+#                 text: "Cancel"
+#                 on_release: root.cancel()
+
+#             Button:
+#                 text: "Load"
+#                 on_release: root.load(filechooser.path, filechooser.selection)
 
 
 <Imagebutton@ButtonBehavior+Image>:

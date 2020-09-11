@@ -9,8 +9,10 @@ from kivy.uix.image import Image
 from kivy.clock import Clock, mainthread
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import AsyncImage
 
-# from database import Database
+
+from database import _request_
 
 import threading
 
@@ -18,9 +20,16 @@ import os
 import time
 
 
+Config.set('graphics', 'width', '480')
+Config.set('graphics', 'height', '800')
 
-from android.permissions import request_permissions, Permission
-request_permissions([Permission.INTERNET,Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE,Permission.CAMERA])
+
+try:
+    from android.permissions import request_permissions, Permission
+    request_permissions([Permission.INTERNET,Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE,Permission.CAMERA])
+except:
+    pass
+
 
 # Login window
 class LoginWin(Screen):
@@ -31,8 +40,8 @@ class LoginWin(Screen):
     @mainthread
     def loginBtn(self):
         if self.checkValid():
-            checkExist = 1
-            # checkExist = Database.userExist(email=self.email.text.strip(), password= self.password.text.strip())
+            # checkExist = 1
+            checkExist = _request_.login(email=self.email.text.strip(), password= self.password.text.strip())
             if checkExist == 1:
                 screens["Main"] = MainWindow(name="Main")
                 sm.add_widget(screens["Main"])
@@ -85,7 +94,7 @@ class SignwinUser(Screen):
     r_password = ObjectProperty()
     phoneNum = ObjectProperty()
     fName = ObjectProperty()
-    lName = ObjectProperty()
+    # lName = ObjectProperty()
     _CheckBox_Doctor = ObjectProperty()
     _Label_Doctor = ObjectProperty()
     _DoctorID = ObjectProperty()
@@ -95,15 +104,12 @@ class SignwinUser(Screen):
         if self.checkValid() == 1:
             info = {}
             info['email'] = self.email.text.strip()
-            info['FirstName'] = self.fName.text.strip()
-            info['LastName'] = self.lName.text.strip()
+            info['FullName'] = self.fName.text.strip()
             info['password'] = self.password.text.strip()
             info['phone'] = self.phoneNum.text.strip()
-            info['user_type'] = 'Ordinary person'
-            info['regester_type'] = 'App'
-            info['doctor_id'] = None
-            # check = Database.registerOP(**info)
-
+            info['doctor_id'] = self._DoctorID.text.strip()
+            info['is_doctor'] = self._CheckBox_Doctor.active
+            check = _request_.signUp(**info)
             if check == 1:
                 if self._CheckBox_Doctor.active:
                     self.userMsg.text = "Please wait to verify your doctor ID"
@@ -111,11 +117,14 @@ class SignwinUser(Screen):
                 else:
                     self.userMsg.text = "You have registered. Enjoy this app "
                     self.error()
-            elif check == 0:
+            elif check == -2:
                 self.userMsg.text = "you has been regestered before"
                 self.error(clr=True)
             elif check == -1:
                 self.userMsg.text = "Connection failed"
+                self.error(clr=True)
+            elif check == 0:
+                self.userMsg.text = "Invalid information"
                 self.error(clr=True)
 
         elif self.checkValid() == -1:
@@ -157,7 +166,7 @@ class SignwinUser(Screen):
     # handle correctness of textinputs
 
     def checkValid(self):
-        if self.email.text.strip() and self.phoneNum.text.strip() and self.password.text.strip() and self.r_password.text.strip() and self.fName.text.strip() and self.lName.text.strip():
+        if self.email.text.strip() and self.phoneNum.text.strip() and self.password.text.strip() and self.r_password.text.strip() and self.fName.text.strip():
             if self.password.text.strip() == self.r_password.text.strip():
                 if len(self.password.text.strip()) > 5:
                     return 1
@@ -202,6 +211,12 @@ class MainWindow(Screen):
             else:
                 self.picture_path = self.img_Gallery.source
                 self.lbl_path.text = self.picture_path
+                check = _request_.postImage(path = self.img_Gallery.source)
+                if check:
+                    self.lbl_path.text = "Done"
+                else:
+                    "connection failed"
+
 
             self.img_Button.source = './icon/camera.png'
             Hide_Widget(self._Again_Button)
@@ -218,28 +233,110 @@ class MainWindow(Screen):
     def show_load(self):
         self._Camera.play = False
         self._Camera.opacity = 0
-        content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
-        self._popup = Popup(title="Load file", content=content,
-                            size_hint=(0.9, 0.9))
-        self._popup.open()
+        screens["GalleryCamera"] = Gallery(name="GalleryCamera")
+        sm.add_widget(screens["GalleryCamera"])
+        sm.current = "GalleryCamera"
 
     def dismiss_popup(self):
         self._popup.dismiss()
         Hide_Widget(self._Again_Button)
         self.img_Button.source = './icon/camera.png'
 
-    def load(self, path, filename):
-        with open(os.path.join(path, filename[0])):
-            self.img_Gallery.source = ''.join(filename)
-        self.dismiss_popup()
+
+    def load(self, path):
+        with open(path):
+            self.img_Gallery.source = path
         self.img_Gallery.opacity = 1
         self.img_Button.source = './icon/analysis.png'
         Show_Widget(self._Again_Button)
 
 
-class LoadDialog(FloatLayout):
-    load = ObjectProperty(None)
-    cancel = ObjectProperty(None)
+
+
+class Gallery(BoxLayout, Screen):
+    def __init__(self, _source= "/home/mehdi/Pictures", *args, **kwargs):
+        super(Gallery, self).__init__(*args, **kwargs)
+        self._source = _source
+        self.callback()
+
+    def callback(self):
+        def update_height(img, *args):
+            img.height = img.width / img.image_ratio
+
+
+        imgs = []
+        valid_Format = ['png', 'jpg', 'jpeg']
+        
+        for img in os.listdir(self._source):
+            if img.split(".")[-1] in valid_Format:
+                imgs.append(os.path.join(self._source, img))
+
+
+        for img in imgs:
+            image = _AsyncImage(source=img,
+                               size_hint=(1, None),
+                               keep_ratio=True,
+                               allow_stretch=True)
+            image.bind(width=update_height, image_ratio=update_height)
+            self.ids.wall.add_widget(image)
+
+
+    def closeGallery(self):
+        sm.current = "Main"
+
+    def chooseDir(self, text= None):
+        screenName = "Gallery" + text
+        paths = {}
+        paths["GalleryCamera"] = "/home/mehdi/Pictures"
+        paths["GalleryScreenShut"] = "/home/mehdi/Pictures"
+        paths["GalleryDownload"] = "/home/mehdi/Pictures/Wallpapers"
+        paths["GalleryTelegram"] = "/home/mehdi/Pictures/Wallpapers"
+
+        if not sm.current == screenName:
+            screens[screenName] = Gallery(name=screenName, _source= paths[screenName])
+            sm.add_widget(screens[screenName])
+            sm.current = screenName
+            
+        else:
+            pass 
+
+
+
+class _AsyncImage(AsyncImage):
+    def __init__(self, *args, **kwargs):
+        super(_AsyncImage, self).__init__(*args, **kwargs)
+
+    
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            print(self.source)
+            ChoosenImgPath.update({"path": self.source})
+            try:
+                sm.remove_widget(screens["FullImage"])
+            except Exception as e:
+                print(e)
+                pass
+            screens["FullImage"] = FullImageView(name= "FullImage", _source= self.source)
+            sm.add_widget(screens["FullImage"])
+            sm.current = "FullImage"
+
+
+
+class FullImageView(Screen):
+
+    def __init__(self, name= None, _source= None, *args, **kwargs):
+        Screen.__init__(self, name= name)
+        self.ids.img.source = _source
+
+    def back(self):
+        sm.current = "GalleryCamera"
+
+    def selectImage(self):
+        sm.current = "Main"
+        sm.get_screen("Main").load(path=ChoosenImgPath["path"])
+
+
+ChoosenImgPath = {"path": None}
 
 
 def Hide_Widget(widget):

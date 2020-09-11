@@ -6,7 +6,7 @@
     phoneNum: phoneNum
     userMsg: userMsg 
     fName: FName
-    lName: LName
+    # lName: LName
     _CheckBox_Doctor:CheckBox_Doctor
     _Label_Doctor:Label_Doctor
     _DoctorID : DoctorID
@@ -24,7 +24,7 @@
             multiline: False
             pos_hint: {"x": 0.1, "top":0.76}
             size_hint: 0.8, 0.05
-            hint_text: "First Name"
+            hint_text: "Full Name"
             # hint_text_color: (1, 0, 0, 1)
             # opacity: 0.5
             valign: 'center'
@@ -32,23 +32,23 @@
                 root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
 
 
-        TextInput:
-            id: LName
-            multiline: False
-            pos_hint: {"x": 0.1, "top":0.69}
-            size_hint: 0.8, 0.05
-            hint_text: "Last Name"
-            # hint_text_color: (1, 0, 0, 1)
-            # opacity: 0.5
-            valign: 'center'
-            on_text:
-                root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
+        # TextInput:
+        #     id: LName
+        #     multiline: False
+        #     pos_hint: {"x": 0.1, "top":0.69}
+        #     size_hint: 0.8, 0.05
+        #     hint_text: "Last Name"
+        #     # hint_text_color: (1, 0, 0, 1)
+        #     # opacity: 0.5
+        #     valign: 'center'
+        #     on_text:
+        #         root.error([root.email, root.password, root.r_password, root.phoneNum], color= (1, 1, 1, 1), Hide= True, clr= True)
 
 
         TextInput:
             id: email
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.62}
+            pos_hint: {"x": 0.1, "top":0.69}
             size_hint: 0.8, 0.05
             hint_text: "Email address"
             # hint_text_color: (1, 0, 0, 1)
@@ -60,7 +60,7 @@
         TextInput:
             id: phoneNum
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.55}
+            pos_hint: {"x": 0.1, "top":0.62}
             size_hint: 0.8, 0.05
             hint_text: "Phone Number"
             valign: 'center'
@@ -72,7 +72,7 @@
             id: password
             password: True
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.48}
+            pos_hint: {"x": 0.1, "top":0.55}
             size_hint: 0.8, 0.05
             hint_text: "Password"
             valign: 'center'
@@ -83,7 +83,7 @@
             id: r_password
             password: True
             multiline: False
-            pos_hint: {"x": 0.1, "top":0.41}
+            pos_hint: {"x": 0.1, "top":0.48}
             size_hint: 0.8, 0.05
             hint_text: "repeat Password"
             valign: 'center'
@@ -92,7 +92,7 @@
         Label:
             id:Label_Doctor
             text:'Are you a Doctor ?'
-            pos_hint: {"x":0.1, "top":0.35}
+            pos_hint: {"x":0.1, "top":0.41}
             size_hint: 0.5, 0.05
             border: (30, 30, 30, 30)
             markup: True
@@ -100,7 +100,7 @@
         TextInput:
             id: DoctorID
             multiline: False
-            pos_hint:  {"x":0.2, "top":0.345}
+            pos_hint:  {"x":0.2, "top":0.405}
             size_hint: 0.6, 0.04
             hint_text: "Doctor ID"
             opacity:0
@@ -109,14 +109,14 @@
 
         CheckBox:
             id:CheckBox_Doctor
-            pos_hint:{"x":0.1,"top":0.35}
+            pos_hint:{"x":0.1,"top":0.41}
             size_hint: 0.04, 0.05
             color:(0,0.2,1,0.6)
             on_release:
                 root.Doctor()
 
         SmoothButton:
-            pos_hint:{"x":0.1,"top":0.29}
+            pos_hint:{"x":0.1,"top":0.35}
             size_hint: 0.8, 0.07
             font_size: "25sp"
             # disabled: True
@@ -128,7 +128,7 @@
 
         Label:
             text:"Have you already an Account? [ref= ""][color=ff1000]Login[/color][/ref]"
-            pos_hint: {"x":0.1, "top":0.19}
+            pos_hint: {"x":0.1, "top":0.26}
             size_hint: 0.8, 0.05
             border: (30, 30, 30, 30)
             markup: True
@@ -154,7 +154,7 @@
             text:"userMsg"
             font_size: "20sp"
             opacity: 0
-            pos_hint: {"x":0.1, "top":0.13}
+            pos_hint: {"x":0.1, "top":0.20}
             size_hint: 0.8, 0.15
             color: [1, 0.4, 0.2, 1]
             valign: 'center'
